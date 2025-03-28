@@ -19,7 +19,12 @@ public class Main {
         int opcion;
         do {
             mostrarMenu();
-            opcion = leerOpcion(scanner);
+            opcion = leerOpcion(scanner);  
+            
+            if (scanner.hasNextLine()) {
+                scanner.nextLine();  
+            }
+            
             procesarOpcion(opcion, sistema, scanner);
         } while (opcion != 0);
         
@@ -43,7 +48,7 @@ public class Main {
     private static void mostrarMenu() {
         System.out.println("\n **MENU**");
         System.out.println("1.  Añadir producto");
-        System.out.println("2. Buscar por SKU");
+        System.out.println("2. Buscar por SKU (desde el 001 en adelante");
         System.out.println("3. Buscar por nombre");
         System.out.println("4. Listar por SKU");
         System.out.println("5.  Listar por nombre");
@@ -53,13 +58,24 @@ public class Main {
         System.out.print("Elige una opción: ");
     }
 
-    private static int leerOpcion(Scanner scanner) {
+/**
+ * Lee la opción del usuario de manera robusta (arreglado para VS Code)
+ */
+private static int leerOpcion(Scanner scanner) {
+    while (true) { 
+        System.out.print("Selecciona una opción: ");
+        System.out.flush();  
+        
         try {
-            return Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine().trim(); 
+            if (!input.isEmpty()) {
+                return Integer.parseInt(input);  
+            }
         } catch (NumberFormatException e) {
-            return -1;
+            System.out.println("⚠️ solo numeros pueden ser ingresados");
         }
     }
+}
 
     private static void procesarOpcion(int opcion, SistemaInventario sistema, Scanner scanner) {
         switch (opcion) {
